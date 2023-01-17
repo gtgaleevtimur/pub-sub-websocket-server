@@ -1,11 +1,13 @@
 package handler
 
 import (
+	"net/http"
+
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/gorilla/websocket"
 	"github.com/rs/zerolog/log"
-	"net/http"
+
 	"pub_sub_websocket_server/internal/repository"
 )
 

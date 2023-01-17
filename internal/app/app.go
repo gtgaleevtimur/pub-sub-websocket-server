@@ -4,15 +4,17 @@ import (
 	"bufio"
 	"context"
 	"fmt"
-	"github.com/rs/zerolog/log"
 	"net/http"
 	"os"
 	"os/signal"
-	"pub_sub_websocket_server/internal/handler"
-	"pub_sub_websocket_server/internal/repository"
 	"strings"
 	"syscall"
 	"time"
+
+	"github.com/rs/zerolog/log"
+
+	"pub_sub_websocket_server/internal/handler"
+	"pub_sub_websocket_server/internal/repository"
 )
 
 func Run() {

@@ -2,11 +2,12 @@ package repository
 
 import (
 	"flag"
-	"github.com/gorilla/websocket"
-	"github.com/rs/zerolog/log"
 	"strconv"
 	"strings"
 	"sync"
+
+	"github.com/gorilla/websocket"
+	"github.com/rs/zerolog/log"
 )
 
 type Storage struct {
