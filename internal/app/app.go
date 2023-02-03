@@ -1,3 +1,4 @@
+// Package app реализует сборку и запуск сервиса с Graceful Shutdown.
 package app
 
 import (
@@ -17,8 +18,9 @@ import (
 	"pub_sub_websocket_server/internal/repository"
 )
 
+// Run - вход в приложение.
 func Run() {
-	storage := repository.NewRepository()
+	storage := repository.NewRepository(repository.WithParseFlag())
 
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)

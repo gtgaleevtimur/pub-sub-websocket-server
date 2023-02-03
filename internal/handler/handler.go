@@ -1,3 +1,4 @@
+// Package handler - пакет реализации роутера, маршрутов и их обработчиков.
 package handler
 
 import (
@@ -11,12 +12,14 @@ import (
 	"pub_sub_websocket_server/internal/repository"
 )
 
+// upgrader - переменная для надстройки http до WebSocket.
 var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
 		return true // Пропускаем любой запрос
 	},
 }
 
+// NewRouter - конструктор роутера сервиса.
 func NewRouter(s *repository.Storage) chi.Router {
 	router := chi.NewRouter()
 
@@ -35,14 +38,17 @@ func NewRouter(s *repository.Storage) chi.Router {
 	return router
 }
 
+// ServerHandler - сущность контроллера.
 type ServerHandler struct {
 	Storage *repository.Storage
 }
 
+// newServerHandler - конструктор контроллера обработчика.
 func newServerHandler(s *repository.Storage) *ServerHandler {
 	return &ServerHandler{Storage: s}
 }
 
+// Subscribe - обработчик '/' маршрута реализует подписку пользователей.
 func (h ServerHandler) Subscribe(w http.ResponseWriter, r *http.Request) {
 	connection, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {

@@ -1,3 +1,4 @@
+// Package repository реализует работу хранилища подписчиков.
 package repository
 
 import (
@@ -10,6 +11,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// Storage - хранилище пользователей.
 type Storage struct {
 	Data     map[int][]*websocket.Conn
 	HubLimit int
@@ -18,22 +20,37 @@ type Storage struct {
 	sync.Mutex
 }
 
-func NewRepository() *Storage {
+// NewRepository - конструктор хранилища.
+func NewRepository(options ...Option) *Storage {
 	s := &Storage{
 		Data:     make(map[int][]*websocket.Conn),
 		Counter:  0,
 		Cursor:   0,
 		HubLimit: 10,
 	}
-	s.ParseFlag()
+	for _, opt := range options {
+		opt(s)
+	}
 	return s
 }
 
+// Option функция конфигурации.
+type Option func(*Storage)
+
+// WithParseFlag - парсит из окружения/флагов, изменяет Config.
+func WithParseFlag() Option {
+	return func(s *Storage) {
+		s.ParseFlag()
+	}
+}
+
+// ParseFlag парсит флаги командной строки при запуске.
 func (s *Storage) ParseFlag() {
 	flag.IntVar(&s.HubLimit, "n", s.HubLimit, "HUB_LIMIT")
 	flag.Parse()
 }
 
+// PubHub - метод отправки сообщения группе подписчиков.
 func (s *Storage) PubHub(str string) {
 	strF := strings.Fields(str)
 	hubNumber, err := strconv.Atoi(strF[1])
@@ -56,6 +73,7 @@ func (s *Storage) PubHub(str string) {
 	log.Info().Str("hub number", strF[1]).Str("message", message).Msg("Successfully publishing message to hub.")
 }
 
+// PubOne - метод отправки сообщения одному пользователю.
 func (s *Storage) PubOne(str string) {
 	strF := strings.Fields(str)
 	userNumber, err := strconv.Atoi(strF[1])
